@@ -38,37 +38,40 @@ class HardwareInput(ctypes.Structure):
         super(HardwareInput, self).__init__(message & 0xFFFFFFFF, parameter & 0xFFFF, parameter >> 16 & 0xFFFF)
 
 
-class _INPUTunion(ctypes.Union):
+class _InputUnion(ctypes.Union):
     _fields_ = (('mi', MouseInput),
                 ('ki', KeyboardInput),
                 ('hi', HardwareInput))
 
 
-class INPUT(ctypes.Structure):
+class Input(ctypes.Structure):
     _fields_ = (('type', DWORD),
-                ('union', _INPUTunion))
+                ('union', _InputUnion))
+
+    def __init__(self, structure):
+        if isinstance(structure, MouseInput):
+            input_type = INPUT_MOUSE
+        elif isinstance(structure, KeyboardInput):
+            input_type = INPUT_KEYBOARD
+        elif isinstance(structure, HardwareInput):
+            input_type = INPUT_HARDWARE
+        else:
+            raise TypeError('Cannot create INPUT structure!')
+
+        super(Input, self).__init__(input_type, _InputUnion(mi=structure))
 
 
 def SendInput(*inputs):
     nInputs = len(inputs)
-    LPINPUT = INPUT * nInputs
+    LPINPUT = Input * nInputs
     pInputs = LPINPUT(*inputs)
-    cbSize = ctypes.c_int(ctypes.sizeof(INPUT))
+    cbSize = ctypes.c_int(ctypes.sizeof(Input))
     return ctypes.windll.user32.SendInput(nInputs, pInputs, cbSize)
 
 
 INPUT_MOUSE = 0
 INPUT_KEYBOARD = 1
 INPUT_HARDWARE = 2
-
-def Input(structure):
-    if isinstance(structure, MouseInput):
-        return INPUT(INPUT_MOUSE, _INPUTunion(mi=structure))
-    if isinstance(structure, KeyboardInput):
-        return INPUT(INPUT_KEYBOARD, _INPUTunion(ki=structure))
-    if isinstance(structure, HardwareInput):
-        return INPUT(INPUT_HARDWARE, _INPUTunion(hi=structure))
-    raise TypeError('Cannot create INPUT structure!')
 
 WHEEL_DELTA = 120
 XBUTTON1 = 0x0001
