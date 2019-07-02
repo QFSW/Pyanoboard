@@ -1,5 +1,5 @@
 # Pyanoboard
-_Pyanoboard_ is a simple piano to keyboard emulator. It allows you to use any MIDI enabled device as a virtual keyboard.
+_Pyanoboard_ is a simple piano to keyboard emulator, allowing you to use any MIDI enabled device as a virtual keyboard.
 
 _Pyanoboard_ actually simulates key events rather than sending characters to be typed, which means you can use it for anything such as gaming and not just typing.
 

@@ -8,7 +8,7 @@ def readme():
 
 setup(name='pyanoboard',
       version='0.1.1',
-      description='Simple piano to keyboard adaptor. Works with any MIDI enabled device.',
+      description='Pyanoboard is a simple piano to keyboard emulator, allowing you to use any MIDI enabled device as a virtual keyboard.',
       long_description=readme(),
       long_description_content_type='text/markdown',
       url='https://github.com/QFSW/Pyanoboard',
