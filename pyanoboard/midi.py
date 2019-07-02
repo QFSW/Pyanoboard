@@ -3,6 +3,7 @@ from pygame import midi
 from pygame.locals import *
 
 class MIDI:
+    OCTAVE_SIZE = 12
     KEYS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
     DYNAMICS = [[16,"ppp"],[33,"pp"],[49,"p"],[64,"mp"],[80,"mf"],[96,"f"],[112,"ff"],[127,"fff"]]
     PEDALS = [[64, "Sustain"]]
@@ -21,11 +22,11 @@ class MIDI:
             print ("%2i: interface :%s:, name :%s:, opened :%s:  %s" %
                    (i, interf, name, opened, in_out))
 
-    def ReturnNote(MIDIEvent):
-        NoteNum = MIDIEvent[1] - 24
-        Octave = math.floor(NoteNum/12)
-        NoteNum-=12*Octave
-        return str(MIDI.KEYS[NoteNum])+str(Octave)
+    def GetNoteTone(MIDIEvent):
+        note_num = MIDIEvent[1] - 24
+        octave = math.floor(note_num / OCTAVE_SIZE)
+        note_num %= OCTAVE_SIZE
+        return MIDI.KEYS[note_num] + str(octave)
 
     def ReturnNoteDynamic(MIDIEvent):
         NoteLoudness = MIDIEvent[2]
