@@ -3,9 +3,10 @@ from pygame import midi
 from pygame.locals import *
 
 class MIDI:
-    Keys = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
-    Dynamics = [[16,"ppp"],[33,"pp"],[49,"p"],[64,"mp"],[80,"mf"],[96,"f"],[112,"ff"],[127,"fff"]]
-    Pedals = [[64, "Sustain"]]
+    KEYS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
+    DYNAMICS = [[16,"ppp"],[33,"pp"],[49,"p"],[64,"mp"],[80,"mf"],[96,"f"],[112,"ff"],[127,"fff"]]
+    PEDALS = [[64, "Sustain"]]
+
     def PrintDeviceInfo():
         for i in range( pygame.midi.get_count() ):
             r = pygame.midi.get_device_info(i)
@@ -24,7 +25,7 @@ class MIDI:
         NoteNum = MIDIEvent[1] - 24
         Octave = math.floor(NoteNum/12)
         NoteNum-=12*Octave
-        return str(MIDI.Keys[NoteNum])+str(Octave)
+        return str(MIDI.KEYS[NoteNum])+str(Octave)
 
     def ReturnNoteDynamic(MIDIEvent):
         NoteLoudness = MIDIEvent[2]
@@ -32,7 +33,7 @@ class MIDI:
         if NoteLoudness == 0:
             DynamicName="OFF"
         else:
-            for Dynamic in MIDI.Dynamics:
+            for Dynamic in MIDI.DYNAMICS:
                 if NoteLoudness <= Dynamic[0]:
                     DynamicName = Dynamic[1]
                     break
@@ -50,7 +51,7 @@ class MIDI:
         PedalVelocity = MIDIEvent[2]
         PedalName="NA"
         isDown = False
-        for Pedal in MIDI.Pedals:
+        for Pedal in MIDI.PEDALS:
             if PedalID == Pedal[0]:
                 PedalName = Pedal[1]
                 break
