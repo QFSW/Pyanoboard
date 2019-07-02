@@ -9,40 +9,43 @@ MainDir = os.path.split(os.path.abspath(__file__))[0]
 pygame.init()
 pygame.midi.init()
 
-MIDI.MIDI.PrintDeviceInfo()
 pygame.display.set_mode((1,1))
 Piano = pygame.midi.Input(1)
 
-class NoteMap:
-    def __init__(self, Note, Key):
-        self.Note = Note
-        self.Key = Key
-        self.IsPlaying = False
-        print(self.Note, self.Key)
-    def Press(self):
-        if not self.IsPlaying:
-            KeyHandling.SendInput(KeyHandling.Keyboard(self.Key))
-            self.IsPlaying = True
-    def UnPress(self):
-        KeyHandling.SendInput(KeyHandling.Keyboard(self.Key, KeyHandling.KEYEVENTF_KEYUP))
-        self.IsPlaying = False
-NoteMaps =(
-[
-    NoteMap("C2", KeyHandling.KEY_S),
-    NoteMap("C#2", KeyHandling.KEY_W),
-    NoteMap("B1", KeyHandling.KEY_A),
-    NoteMap("D2", KeyHandling.KEY_D),
-    NoteMap("C3", KeyHandling.KEY_G),
-    NoteMap("C#3", KeyHandling.KEY_T),
-    NoteMap("B2", KeyHandling.KEY_F),
-    NoteMap("D3", KeyHandling.KEY_H),
-    NoteMap("C4", KeyHandling.KEY_L),
-    NoteMap("C#4", KeyHandling.KEY_O),
-    NoteMap("B3", KeyHandling.KEY_K),
-    NoteMap("D4", KeyHandling.KEY_R),
-    NoteMap("D#4", KeyHandling.KEY_P),
-    NoteMap("F4", KeyHandling.KEY_Z)
-    ])
+
+class Binding:
+    def __init__(self, note_name, keyboard_key):
+        self.note = note_name
+        self.key = keyboard_key
+        self.is_pressed = False
+
+    def press(self):
+        self.is_pressed = True
+        key_input = key_handling.new_keyboard_input(self.key)
+        key_handling.send_input(key_input)
+
+    def un_press(self):
+        self.is_pressed = False
+        key_input = key_handling.new_keyboard_input(self.key, keys.KEYEVENTF_KEYUP)
+        key_handling.send_input(key_input)
+
+
+NoteMaps = [
+    Binding("C2", KeyHandling.KEY_S),
+    Binding("C#2", KeyHandling.KEY_W),
+    Binding("B1", KeyHandling.KEY_A),
+    Binding("D2", KeyHandling.KEY_D),
+    Binding("C3", KeyHandling.KEY_G),
+    Binding("C#3", KeyHandling.KEY_T),
+    Binding("B2", KeyHandling.KEY_F),
+    Binding("D3", KeyHandling.KEY_H),
+    Binding("C4", KeyHandling.KEY_L),
+    Binding("C#4", KeyHandling.KEY_O),
+    Binding("B3", KeyHandling.KEY_K),
+    Binding("D4", KeyHandling.KEY_R),
+    Binding("D#4", KeyHandling.KEY_P),
+    Binding("F4", KeyHandling.KEY_Z)
+]
 
 while True:
     if Piano.poll():
