@@ -20,19 +20,15 @@ PEDALS = [
 ]
 
 
-def PrintDeviceInfo():
-    for i in range( pygame.midi.get_count() ):
-        r = pygame.midi.get_device_info(i)
-        (interf, name, input, output, opened) = r
+def get_device_info(device_id):
+    (interface, name, input_, output, opened) = pygame.midi.get_device_info(device_id)
 
-        in_out = ""
-        if input:
-            in_out = "(input)"
-        if output:
-            in_out = "(output)"
+    if input_:
+        io_status = "(input)"
+    else:
+        io_status = "(output)"
 
-        print ("%2i: interface :%s:, name :%s:, opened :%s:  %s" %
-               (i, interf, name, opened, in_out))
+    return "interface :%s:, name :%s:, opened :%s:  %s" % (interface, name, opened, io_status)
 
 
 def get_note_tone(note_event):
