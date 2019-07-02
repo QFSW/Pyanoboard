@@ -15,7 +15,7 @@ class Binding:
         key_input = key_handling.new_key_input(self.key)
         key_handling.send_input(key_input)
 
-    def unpress(self):
+    def release(self):
         self.is_pressed = False
         key_input = key_handling.new_key_input(self.key, keys.KEYEVENTF_KEYUP)
         key_handling.send_input(key_input)
@@ -27,7 +27,7 @@ class Emulator:
         self.midi_device = pygame.midi.Input(midi_device_id)
         self.bindings = bindings
 
-    def unpress_all(self):
+    def release_all(self):
         for binding in self.bindings:
             binding.un_press()
 
@@ -45,14 +45,14 @@ class Emulator:
     def handle_pedal(self, midi_event):
         (pedal, is_pressed) = midi.get_pedal(midi_event)
         if is_pressed:
-            self.unpress_all()
+            self.release_all()
 
     def handle_note(self, midi_event):
         (note, dynamic) = midi.get_note(midi_event)
         for binding in self.bindings:
             if binding.note == note:
                 if dynamic == "OFF":
-                    binding.unpress()
+                    binding.release()
                 else:
                     binding.press()
 
