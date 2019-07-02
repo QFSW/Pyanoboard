@@ -1,4 +1,1 @@
-import pyanoboard
-
-if __name__ == "__main__":
-    pyanoboard.main()
+__version__ = "0.1.0"
