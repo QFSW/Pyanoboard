@@ -35,7 +35,11 @@ class Emulator:
             binding.un_press()
 
     def run(self):
-        while True:
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
             if self.midi_device.poll():
                 midi_events = self.midi_device.read(10)
                 for (midi_event, timestamp) in midi_events:
@@ -44,6 +48,7 @@ class Emulator:
                         self.handle_pedal(midi_event)
                     elif event_type == midi.EventType.NOTE:
                         self.handle_note(midi_event)
+        pygame.quit()
 
     def handle_pedal(self, midi_event):
         (pedal, is_pressed) = midi.get_pedal(midi_event)
