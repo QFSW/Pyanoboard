@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='pyanoboard',
-      version='0.1.1',
+      version='1.0.0',
       description='Simple piano to keyboard adaptor. Works with any MIDI enabled device.',
       long_description=readme(),
       long_description_content_type='text/markdown',
