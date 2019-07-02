@@ -1,6 +1,8 @@
-import pygame, os, math, sys
-from pygame import midi
-from pygame.locals import *
+import math
+from enum import Enum
+
+# Tuple structures
+# midi_event = (type, id, velocity)
 
 OCTAVE_SIZE = 12
 C1_SEMITONE = 2 * OCTAVE_SIZE
@@ -20,27 +22,20 @@ PEDALS = [
 ]
 
 
-def get_device_info(device_id):
-    (interface, name, input_, output, opened) = pygame.midi.get_device_info(device_id)
+class EventType(Enum):
+    NOTE = 144
+    PEDAL = 176
 
-    if input_:
-        io_status = "(input)"
-    else:
-        io_status = "(output)"
-
-    return "interface :%s:, name :%s:, opened :%s:  %s" % (interface, name, opened, io_status)
-
-
-def get_note_tone(note_event):
-    raw_semitone = note_event[1]
+def get_note_tone(midi_event):
+    raw_semitone = midi_event[1]
     offset_semitone = raw_semitone - C1_SEMITONE  # center notes to be around C1
     octave = math.floor(offset_semitone / OCTAVE_SIZE)
     note_index = offset_semitone % OCTAVE_SIZE
     return KEYS[note_index] + str(octave)
 
 
-def get_note_dynamic(note_event):
-    loudness = note_event[2]
+def get_note_dynamic(midi_event):
+    loudness = midi_event[2]
     if loudness == 0:
         return "OFF"
     else:
@@ -50,36 +45,28 @@ def get_note_dynamic(note_event):
         return "N/A"
 
 
-def PrintNote(MIDIEvent):
-    if MIDIEvent[2]!=0:
-        String = get_note_tone(MIDIEvent)
-        String+=str(" (")+get_note_dynamic(MIDIEvent)+")"
-        print(String)
+def get_note(midi_event):
+    tone = get_note_tone(midi_event)
+    dynamic = get_note_dynamic(midi_event)
+    return tone, dynamic
 
 
-def ReturnPedal(MIDIEvent):
-    PedalID = MIDIEvent[1]
-    PedalVelocity = MIDIEvent[2]
-    PedalName="NA"
-    isDown = False
-    for Pedal in PEDALS:
-        if PedalID == Pedal[0]:
-            PedalName = Pedal[1]
+def get_pedal(midi_event):
+    pedal_id = midi_event[1]
+    pedal_vel = midi_event[2]
+
+    pedal_name = "NA"
+    is_down = False
+
+    for (id_, name) in PEDALS:
+        if pedal_id == id_:
+            pedal_name = name
             break
-    if PedalVelocity == 127: isDown = True
-    return [PedalName, isDown]
+
+    if pedal_vel == 127:
+        is_down = True
+    return pedal_name, is_down
 
 
-def PrintPedal(MIDIEvent):
-    PedalData = ReturnPedal(MIDIEvent)
-    String = PedalData[0]
-    if PedalData[1]: String+=" Down"
-    else: String+=" Up"
-    print(String)
-
-
-def PrintEvent(MIDIEvent):
-    if MIDIEvent[0] == 144:
-        PrintNote(MIDIEvent)
-    elif MIDIEvent[0] == 176:
-        PrintPedal(MIDIEvent)
+def get_event_type(midi_event):
+    return EventType(midi_event[0])
