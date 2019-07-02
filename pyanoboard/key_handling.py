@@ -54,15 +54,13 @@ class Input(ctypes.Structure):
 
     def __init__(self, structure):
         if isinstance(structure, MouseInput):
-            input_type = INPUT_MOUSE
+            super(Input, self).__init__(INPUT_MOUSE, _InputUnion(mi=structure))
         elif isinstance(structure, KeyboardInput):
-            input_type = INPUT_KEYBOARD
+            super(Input, self).__init__(INPUT_KEYBOARD, _InputUnion(ki=structure))
         elif isinstance(structure, HardwareInput):
-            input_type = INPUT_HARDWARE
+            super(Input, self).__init__(INPUT_HARDWARE, _InputUnion(hi=structure))
         else:
             raise TypeError('Cannot create Input structure!')
-
-        super(Input, self).__init__(input_type, _InputUnion(mi=structure))
 
 
 def send_input(*inputs):

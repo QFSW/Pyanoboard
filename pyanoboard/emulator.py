@@ -20,7 +20,6 @@ class Binding:
         self.is_pressed = False
 
     def press(self):
-        print(self.key)
         self.is_pressed = True
         key_input = key_handling.new_key_input(self.key)
         key_handling.send_input(key_input)
@@ -44,22 +43,27 @@ class Emulator:
     def run(self):
         while True:
             if self.midi_device.poll():
-                MIDIEvents = self.midi_device.read(10)
-                if MIDIEvents[0][0][1] != 0:
-                    for (event, timestamp) in MIDIEvents:
-                        event_type = midi.get_event_type(event)
-                        if event_type == midi.EventType.PEDAL:
-                            if MIDI.MIDI.ReturnPedal(Event[0])[1] == True:
-                                for Key in NoteMaps:
-                                    Key.UnPress()
-                        elif event_type == midi.EventType.NOTE:
-                            (note, dynamic) = midi.get_note(event)
-                            for binding in self.bindings:
-                                if binding.note == note:
-                                    if dynamic == "OFF":
-                                        binding.unpress()
-                                    else:
-                                        binding.press()
+                midi_events = self.midi_device.read(10)
+                for (midi_event, timestamp) in midi_events:
+                    event_type = midi.get_event_type(midi_event)
+                    if event_type == midi.EventType.PEDAL:
+                        self.handle_pedal(midi_event)
+                    elif event_type == midi.EventType.NOTE:
+                        self.handle_note(midi_event)
+
+    def handle_pedal(self, midi_event):
+        (pedal, is_pressed) = midi.get_pedal(midi_event)
+        if is_pressed:
+            self.unpress_all()
+
+    def handle_note(self, midi_event):
+        (note, dynamic) = midi.get_note(midi_event)
+        for binding in self.bindings:
+            if binding.note == note:
+                if dynamic == "OFF":
+                    binding.unpress()
+                else:
+                    binding.press()
 
 
 KeyMaps = [
