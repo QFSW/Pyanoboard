@@ -18,6 +18,7 @@ PEDALS = [
     [64, "Sustain"]
 ]
 
+
 def PrintDeviceInfo():
     for i in range( pygame.midi.get_count() ):
         r = pygame.midi.get_device_info(i)
@@ -32,11 +33,13 @@ def PrintDeviceInfo():
         print ("%2i: interface :%s:, name :%s:, opened :%s:  %s" %
                (i, interf, name, opened, in_out))
 
+
 def get_note_tone(MIDIEvent):
     note_num = MIDIEvent[1] - 24
     octave = math.floor(note_num / OCTAVE_SIZE)
     note_num %= OCTAVE_SIZE
     return KEYS[note_num] + str(octave)
+
 
 def get_note_dynamic(MIDIEvent):
     loudness = MIDIEvent[2]
@@ -51,11 +54,13 @@ def get_note_dynamic(MIDIEvent):
 
     return dynamic_name
 
+
 def PrintNote(MIDIEvent):
     if MIDIEvent[2]!=0:
         String = get_note_tone(MIDIEvent)
         String+=str(" (")+get_note_dynamic(MIDIEvent)+")"
         print(String)
+
 
 def ReturnPedal(MIDIEvent):
     PedalID = MIDIEvent[1]
@@ -69,6 +74,7 @@ def ReturnPedal(MIDIEvent):
     if PedalVelocity == 127: isDown = True
     return [PedalName, isDown]
 
+
 def PrintPedal(MIDIEvent):
     PedalData = ReturnPedal(MIDIEvent)
     String = PedalData[0]
@@ -76,9 +82,9 @@ def PrintPedal(MIDIEvent):
     else: String+=" Up"
     print(String)
 
+
 def PrintEvent(MIDIEvent):
     if MIDIEvent[0] == 144:
         PrintNote(MIDIEvent)
     elif MIDIEvent[0] == 176:
         PrintPedal(MIDIEvent)
-            
