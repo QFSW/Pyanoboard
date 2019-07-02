@@ -3,6 +3,7 @@ from pygame import midi
 from pygame.locals import *
 
 OCTAVE_SIZE = 12
+C1_SEMITONE = 2 * OCTAVE_SIZE
 KEYS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 DYNAMICS = [
     [16, "ppp"],
@@ -34,11 +35,12 @@ def PrintDeviceInfo():
                (i, interf, name, opened, in_out))
 
 
-def get_note_tone(MIDIEvent):
-    note_num = MIDIEvent[1] - 24
-    octave = math.floor(note_num / OCTAVE_SIZE)
-    note_num %= OCTAVE_SIZE
-    return KEYS[note_num] + str(octave)
+def get_note_tone(note_event):
+    raw_semitone = note_event[1]
+    offset_semitone = raw_semitone - C1_SEMITONE  # center notes to be around C1
+    octave = math.floor(offset_semitone / OCTAVE_SIZE)
+    note_index = offset_semitone % OCTAVE_SIZE
+    return KEYS[note_index] + str(octave)
 
 
 def get_note_dynamic(MIDIEvent):
