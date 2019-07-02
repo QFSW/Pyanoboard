@@ -108,3 +108,4 @@ venv.bak/
 
 # Visual Studio
 .vs/
+tmp/

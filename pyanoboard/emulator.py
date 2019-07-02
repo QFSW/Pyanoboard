@@ -1,8 +1,10 @@
 import pygame
+import os
 import midi
 import key_handling
 import key_events
 from pygame import midi as pygame_midi
+
 
 class Binding:
     def __init__(self, note_name, keyboard_key):
@@ -26,6 +28,7 @@ class Emulator:
         self.midi_device_id = midi_device_id
         self.midi_device = pygame.midi.Input(midi_device_id)
         self.bindings = bindings
+        self.verbose = False
 
     def release_all(self):
         for binding in self.bindings:
@@ -55,4 +58,10 @@ class Emulator:
                     binding.release()
                 else:
                     binding.press()
+
+
+def init_pygame():
+    os.environ["SDL_VIDEODRIVER"] = "dummy"
+    pygame.init()
+    pygame.midi.init()
 
