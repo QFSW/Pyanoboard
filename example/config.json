@@ -1,0 +1,25 @@
+{
+  "device_id": 1,
+  "bindings": [
+    {
+      "note": "C3",
+      "key": "h"
+    },
+    {
+      "note": "C#3",
+      "key": "e"
+    },
+    {
+      "note": "D3",
+      "key": "l"
+    },
+    {
+      "note": "D#3",
+      "key": "o"
+    },
+    {
+      "note": "E3",
+      "key": "ENTER"
+    }
+  ]
+}
