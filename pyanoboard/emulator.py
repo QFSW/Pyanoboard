@@ -1,4 +1,5 @@
-import pygame, os, math, sys, MIDI, KeyHandling, time
+import pygame, os, midi, KeyHandling, time
+import key_handling, keys
 from pygame import midi
 from pygame.locals import *
 
@@ -42,22 +43,6 @@ NoteMaps =(
     NoteMap("D#4", KeyHandling.KEY_P),
     NoteMap("F4", KeyHandling.KEY_Z)
     ])
-
-for Key in NoteMaps:
-    Key.UnPress()
-
-#crack mode
-onCrack = False
-CrackLevel = 30
-Clock = pygame.time.Clock()
-time.sleep(3)
-#triggered
-while onCrack:
-    Clock.tick(CrackLevel)
-    KeyHandling.SendInput(KeyHandling.Keyboard(KeyHandling.KEY_S))
-    Clock.tick(CrackLevel)
-    KeyHandling.SendInput(KeyHandling.Keyboard(KeyHandling.KEY_S, KeyHandling.KEYEVENTF_KEYUP))
-    
 
 while True:
     if Piano.poll():
