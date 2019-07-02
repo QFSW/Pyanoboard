@@ -4,7 +4,7 @@ import keys
 import emulator
 import pygame
 import json
-from pygame import  midi
+from pygame import midi
 
 
 def print_device_info():
