@@ -5,6 +5,7 @@ DWORD = ctypes.c_ulong
 ULONG_PTR = ctypes.POINTER(DWORD)
 WORD = ctypes.c_ushort
 
+
 class MOUSEINPUT(ctypes.Structure):
     _fields_ = (('dx', LONG),
                 ('dy', LONG),
@@ -13,26 +14,37 @@ class MOUSEINPUT(ctypes.Structure):
                 ('time', DWORD),
                 ('dwExtraInfo', ULONG_PTR))
 
-class KEYBDINPUT(ctypes.Structure):
+
+class KeyboardInput(ctypes.Structure):
     _fields_ = (('wVk', WORD),
                 ('wScan', WORD),
                 ('dwFlags', DWORD),
                 ('time', DWORD),
                 ('dwExtraInfo', ULONG_PTR))
 
-class HARDWAREINPUT(ctypes.Structure):
+    def __init__(self, code, flags):
+        super(KeyboardInput, self).__init__(code, code, flags, 0, None)
+
+
+class HardwareInput(ctypes.Structure):
     _fields_ = (('uMsg', DWORD),
                 ('wParamL', WORD),
                 ('wParamH', WORD))
 
+    def __init__(self, message, parameter):
+        super(HardwareInput, self).__init__(message & 0xFFFFFFFF, parameter & 0xFFFF, parameter >> 16 & 0xFFFF)
+
+
 class _INPUTunion(ctypes.Union):
     _fields_ = (('mi', MOUSEINPUT),
-                ('ki', KEYBDINPUT),
-                ('hi', HARDWAREINPUT))
+                ('ki', KeyboardInput),
+                ('hi', HardwareInput))
+
 
 class INPUT(ctypes.Structure):
     _fields_ = (('type', DWORD),
                 ('union', _INPUTunion))
+
 
 def SendInput(*inputs):
     nInputs = len(inputs)
@@ -48,9 +60,9 @@ INPUT_HARDWARD = 2
 def Input(structure):
     if isinstance(structure, MOUSEINPUT):
         return INPUT(INPUT_MOUSE, _INPUTunion(mi=structure))
-    if isinstance(structure, KEYBDINPUT):
+    if isinstance(structure, KeyboardInput):
         return INPUT(INPUT_KEYBOARD, _INPUTunion(ki=structure))
-    if isinstance(structure, HARDWAREINPUT):
+    if isinstance(structure, HardwareInput):
         return INPUT(INPUT_HARDWARE, _INPUTunion(hi=structure))
     raise TypeError('Cannot create INPUT structure!')
 
@@ -80,14 +92,6 @@ KEYEVENTF_EXTENDEDKEY = 0x0001
 KEYEVENTF_KEYUP = 0x0002
 KEYEVENTF_SCANCODE = 0x0008
 KEYEVENTF_UNICODE = 0x0004
-
-def KeybdInput(code, flags):
-    return KEYBDINPUT(code, code, flags, 0, None)
-
-def HardwareInput(message, parameter):
-    return HARDWAREINPUT(message & 0xFFFFFFFF,
-                         parameter & 0xFFFF,
-                         parameter >> 16 & 0xFFFF)
 
 def Mouse(flags, x=0, y=0, data=0):
     return Input(MouseInput(flags, x, y, data))
