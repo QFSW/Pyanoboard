@@ -9,6 +9,7 @@ INPUT_MOUSE = 0
 INPUT_KEYBOARD = 1
 INPUT_HARDWARE = 2
 
+
 class MouseInput(ctypes.Structure):
     _fields_ = (('dx', LONG),
                 ('dy', LONG),
@@ -59,7 +60,7 @@ class Input(ctypes.Structure):
         elif isinstance(structure, HardwareInput):
             input_type = INPUT_HARDWARE
         else:
-            raise TypeError('Cannot create INPUT structure!')
+            raise TypeError('Cannot create Input structure!')
 
         super(Input, self).__init__(input_type, _InputUnion(mi=structure))
 
@@ -72,13 +73,13 @@ def send_input(*inputs):
     return ctypes.windll.user32.SendInput(n_inputs, p_inputs, cb_size)
 
 
-def Mouse(flags, x=0, y=0, data=0):
+def new_mouse_input(flags, x=0, y=0, data=0):
     return Input(MouseInput(flags, x, y, data))
 
 
-def Keyboard(code, flags=0):
+def new_key_input(code, flags=0):
     return Input(KeyboardInput(code, flags))
 
 
-def Hardware(message, parameter=0):
+def new_hardware_input(message, parameter=0):
     return Input(HardwareInput(message, parameter))
