@@ -73,5 +73,5 @@ def get_pedal(midi_event):
 def get_event_type(midi_event):
     try:
         return EventType(midi_event[0])
-    except TypeError:
+    except (TypeError, ValueError):
         return EventType.NONE

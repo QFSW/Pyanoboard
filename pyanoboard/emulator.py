@@ -4,7 +4,6 @@ import midi
 import key_handling
 import keys
 from pygame import midi as pygame_midi
-from pygame.locals import *
 
 
 def init_pygame():
