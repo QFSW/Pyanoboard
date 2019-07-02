@@ -6,17 +6,17 @@ OCTAVE_SIZE = 12
 C1_SEMITONE = 2 * OCTAVE_SIZE
 KEYS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 DYNAMICS = [
-    [16, "ppp"],
-    [33, "pp"],
-    [49, "p"],
-    [64, "mp"],
-    [80, "mf"],
-    [96, "f"],
-    [112, "ff"],
-    [127, "fff"]
+    (16, "ppp"),
+    (33, "pp"),
+    (49, "p"),
+    (64, "mp"),
+    (80, "mf"),
+    (96, "f"),
+    (112, "ff"),
+    (127, "fff")
 ]
 PEDALS = [
-    [64, "Sustain"]
+    (64, "Sustain")
 ]
 
 
@@ -43,18 +43,15 @@ def get_note_tone(note_event):
     return KEYS[note_index] + str(octave)
 
 
-def get_note_dynamic(MIDIEvent):
-    loudness = MIDIEvent[2]
-    dynamic_name = ""
+def get_note_dynamic(note_event):
+    loudness = note_event[2]
     if loudness == 0:
-        dynamic_name = "OFF"
+        return "OFF"
     else:
-        for dynamic in DYNAMICS:
-            if loudness <= dynamic[0]:
-                dynamic_name = dynamic[1]
-                break
-
-    return dynamic_name
+        for (value, name) in DYNAMICS:
+            if loudness <= value:
+                return name
+        return "N/A"
 
 
 def PrintNote(MIDIEvent):
