@@ -26,6 +26,7 @@ class EventType(Enum):
     NOTE = 144
     PEDAL = 176
 
+
 def get_note_tone(midi_event):
     raw_semitone = midi_event[1]
     offset_semitone = raw_semitone - C1_SEMITONE  # center notes to be around C1
