@@ -1,16 +1,8 @@
 import pygame
-import os
 import midi
 import key_handling
 import keys
 from pygame import midi as pygame_midi
-
-
-def init_pygame():
-    os.environ["SDL_VIDEODRIVER"] = "dummy"
-    pygame.init()
-    pygame.midi.init()
-
 
 class Binding:
     def __init__(self, note_name, keyboard_key):
@@ -63,26 +55,4 @@ class Emulator:
                     binding.unpress()
                 else:
                     binding.press()
-
-
-KeyMaps = [
-    Binding("C2", keys.KEY_S),
-    Binding("C#2", keys.KEY_W),
-    Binding("B1", keys.KEY_A),
-    Binding("D2", keys.KEY_D),
-    Binding("C3", keys.KEY_G),
-    Binding("C#3", keys.KEY_T),
-    Binding("B2", keys.KEY_F),
-    Binding("D3", keys.KEY_H),
-    Binding("C4", keys.KEY_L),
-    Binding("C#4", keys.KEY_O),
-    Binding("B3", keys.KEY_K),
-    Binding("D4", keys.KEY_R),
-    Binding("D#4", keys.KEY_P),
-    Binding("F4", keys.KEY_Z)
-]
-
-init_pygame()
-emulator = Emulator(1, KeyMaps)
-emulator.run()
 
