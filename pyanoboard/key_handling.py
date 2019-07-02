@@ -6,13 +6,16 @@ ULONG_PTR = ctypes.POINTER(DWORD)
 WORD = ctypes.c_ushort
 
 
-class MOUSEINPUT(ctypes.Structure):
+class MouseInput(ctypes.Structure):
     _fields_ = (('dx', LONG),
                 ('dy', LONG),
                 ('mouseData', DWORD),
                 ('dwFlags', DWORD),
                 ('time', DWORD),
                 ('dwExtraInfo', ULONG_PTR))
+
+    def __init__(self, x, y, flags, data):
+        super(MouseInput, self).__init__(x, y, data, flags, 0, None)
 
 
 class KeyboardInput(ctypes.Structure):
@@ -36,7 +39,7 @@ class HardwareInput(ctypes.Structure):
 
 
 class _INPUTunion(ctypes.Union):
-    _fields_ = (('mi', MOUSEINPUT),
+    _fields_ = (('mi', MouseInput),
                 ('ki', KeyboardInput),
                 ('hi', HardwareInput))
 
@@ -53,12 +56,13 @@ def SendInput(*inputs):
     cbSize = ctypes.c_int(ctypes.sizeof(INPUT))
     return ctypes.windll.user32.SendInput(nInputs, pInputs, cbSize)
 
+
 INPUT_MOUSE = 0
 INPUT_KEYBOARD = 1
-INPUT_HARDWARD = 2
+INPUT_HARDWARE = 2
 
 def Input(structure):
-    if isinstance(structure, MOUSEINPUT):
+    if isinstance(structure, MouseInput):
         return INPUT(INPUT_MOUSE, _INPUTunion(mi=structure))
     if isinstance(structure, KeyboardInput):
         return INPUT(INPUT_KEYBOARD, _INPUTunion(ki=structure))
@@ -84,20 +88,20 @@ MOUSEEVENTF_WHEEL = 0x0800
 MOUSEEVENTF_XDOWN = 0x0080
 MOUSEEVENTF_XUP = 0x0100
 
-def MouseInput(flags, x, y, data):
-    return MOUSEINPUT(x, y, data, flags, 0, None)
-
 
 KEYEVENTF_EXTENDEDKEY = 0x0001
 KEYEVENTF_KEYUP = 0x0002
 KEYEVENTF_SCANCODE = 0x0008
 KEYEVENTF_UNICODE = 0x0004
 
+
 def Mouse(flags, x=0, y=0, data=0):
     return Input(MouseInput(flags, x, y, data))
 
+
 def Keyboard(code, flags=0):
-    return Input(KeybdInput(code, flags))
+    return Input(KeyboardInput(code, flags))
+
 
 def Hardware(message, parameter=0):
     return Input(HardwareInput(message, parameter))
