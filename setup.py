@@ -8,4 +8,7 @@ setup(name='pyanoboard',
       author_email='support@qfsw.co.uk',
       license='MIT',
       packages=['pyanoboard'],
-      zip_safe=False)
+      zip_safe=False,
+      install_requires=[
+            'pygame',
+      ])
