@@ -23,6 +23,7 @@ PEDALS = [
 
 
 class EventType(Enum):
+    NONE = 0
     NOTE = 144
     PEDAL = 176
 
@@ -70,4 +71,7 @@ def get_pedal(midi_event):
 
 
 def get_event_type(midi_event):
-    return EventType(midi_event[0])
+    try:
+        return EventType(midi_event[0])
+    except TypeError:
+        return EventType.NONE

@@ -1,7 +1,9 @@
-import pygame, os, midi
+import pygame
+import os
 import midi
-import key_handling, keys
-from pygame import midi
+import key_handling
+import keys
+from pygame import midi as pygame_midi
 from pygame.locals import *
 
 
@@ -18,13 +20,14 @@ class Binding:
         self.is_pressed = False
 
     def press(self):
+        print(self.key)
         self.is_pressed = True
-        key_input = key_handling.new_keyboard_input(self.key)
+        key_input = key_handling.new_key_input(self.key)
         key_handling.send_input(key_input)
 
     def unpress(self):
         self.is_pressed = False
-        key_input = key_handling.new_keyboard_input(self.key, keys.KEYEVENTF_KEYUP)
+        key_input = key_handling.new_key_input(self.key, keys.KEYEVENTF_KEYUP)
         key_handling.send_input(key_input)
 
 
@@ -43,22 +46,23 @@ class Emulator:
             if self.midi_device.poll():
                 MIDIEvents = self.midi_device.read(10)
                 if MIDIEvents[0][0][1] != 0:
-                    for Event in MIDIEvents:
-                        if Event[0][0] == 176:
+                    for (event, timestamp) in MIDIEvents:
+                        event_type = midi.get_event_type(event)
+                        if event_type == midi.EventType.PEDAL:
                             if MIDI.MIDI.ReturnPedal(Event[0])[1] == True:
                                 for Key in NoteMaps:
                                     Key.UnPress()
-                        elif Event[0][0] == 144:
-                            Note = MIDI.MIDI.ReturnNote(Event[0])
-                            for Key in NoteMaps:
-                                if Key.Note == Note:
-                                    if (MIDI.MIDI.ReturnNoteDynamic(Event[0]) == "OFF"):
-                                        Key.UnPress()
+                        elif event_type == midi.EventType.NOTE:
+                            (note, dynamic) = midi.get_note(event)
+                            for binding in self.bindings:
+                                if binding.note == note:
+                                    if dynamic == "OFF":
+                                        binding.unpress()
                                     else:
-                                        Key.Press()
+                                        binding.press()
 
 
-NoteMaps = [
+KeyMaps = [
     Binding("C2", keys.KEY_S),
     Binding("C#2", keys.KEY_W),
     Binding("B1", keys.KEY_A),
@@ -74,4 +78,8 @@ NoteMaps = [
     Binding("D#4", keys.KEY_P),
     Binding("F4", keys.KEY_Z)
 ]
-                    
+
+init_pygame()
+emulator = Emulator(1, KeyMaps)
+emulator.run()
+
