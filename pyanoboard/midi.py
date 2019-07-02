@@ -4,9 +4,20 @@ from pygame.locals import *
 
 class MIDI:
     OCTAVE_SIZE = 12
-    KEYS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
-    DYNAMICS = [[16,"ppp"],[33,"pp"],[49,"p"],[64,"mp"],[80,"mf"],[96,"f"],[112,"ff"],[127,"fff"]]
-    PEDALS = [[64, "Sustain"]]
+    KEYS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    DYNAMICS = [
+        [16, "ppp"],
+        [33, "pp"],
+        [49, "p"],
+        [64, "mp"],
+        [80, "mf"],
+        [96, "f"],
+        [112, "ff"],
+        [127, "fff"]
+    ]
+    PEDALS = [
+        [64, "Sustain"]
+    ]
 
     def PrintDeviceInfo():
         for i in range( pygame.midi.get_count() ):
@@ -24,22 +35,22 @@ class MIDI:
 
     def GetNoteTone(MIDIEvent):
         note_num = MIDIEvent[1] - 24
-        octave = math.floor(note_num / OCTAVE_SIZE)
-        note_num %= OCTAVE_SIZE
+        octave = math.floor(note_num / MIDI.OCTAVE_SIZE)
+        note_num %= MIDI.OCTAVE_SIZE
         return MIDI.KEYS[note_num] + str(octave)
 
-    def ReturnNoteDynamic(MIDIEvent):
-        NoteLoudness = MIDIEvent[2]
-        DynamicName=""
-        if NoteLoudness == 0:
-            DynamicName="OFF"
+    def GetNoteDynamic(MIDIEvent):
+        loudness = MIDIEvent[2]
+        dynamic_name = ""
+        if loudness == 0:
+            dynamic_name = "OFF"
         else:
-            for Dynamic in MIDI.DYNAMICS:
-                if NoteLoudness <= Dynamic[0]:
-                    DynamicName = Dynamic[1]
+            for dynamic in MIDI.DYNAMICS:
+                if loudness <= dynamic[0]:
+                    dynamic_name = dynamic[1]
                     break
                 
-        return DynamicName
+        return dynamic_name
     
     def PrintNote(MIDIEvent):
         if MIDIEvent[2]!=0:
