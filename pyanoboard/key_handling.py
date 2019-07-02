@@ -5,6 +5,9 @@ DWORD = ctypes.c_ulong
 ULONG_PTR = ctypes.POINTER(DWORD)
 WORD = ctypes.c_ushort
 
+INPUT_MOUSE = 0
+INPUT_KEYBOARD = 1
+INPUT_HARDWARE = 2
 
 class MouseInput(ctypes.Structure):
     _fields_ = (('dx', LONG),
@@ -61,41 +64,12 @@ class Input(ctypes.Structure):
         super(Input, self).__init__(input_type, _InputUnion(mi=structure))
 
 
-def SendInput(*inputs):
-    nInputs = len(inputs)
-    LPINPUT = Input * nInputs
-    pInputs = LPINPUT(*inputs)
-    cbSize = ctypes.c_int(ctypes.sizeof(Input))
-    return ctypes.windll.user32.SendInput(nInputs, pInputs, cbSize)
-
-
-INPUT_MOUSE = 0
-INPUT_KEYBOARD = 1
-INPUT_HARDWARE = 2
-
-WHEEL_DELTA = 120
-XBUTTON1 = 0x0001
-XBUTTON2 = 0x0002
-MOUSEEVENTF_ABSOLUTE = 0x8000
-MOUSEEVENTF_HWHEEL = 0x01000
-MOUSEEVENTF_MOVE = 0x0001
-MOUSEEVENTF_MOVE_NOCOALESCE = 0x2000
-MOUSEEVENTF_LEFTDOWN = 0x0002
-MOUSEEVENTF_LEFTUP = 0x0004
-MOUSEEVENTF_RIGHTDOWN = 0x0008
-MOUSEEVENTF_RIGHTUP = 0x0010
-MOUSEEVENTF_MIDDLEDOWN = 0x0020
-MOUSEEVENTF_MIDDLEUP = 0x0040
-MOUSEEVENTF_VIRTUALDESK = 0x4000
-MOUSEEVENTF_WHEEL = 0x0800
-MOUSEEVENTF_XDOWN = 0x0080
-MOUSEEVENTF_XUP = 0x0100
-
-
-KEYEVENTF_EXTENDEDKEY = 0x0001
-KEYEVENTF_KEYUP = 0x0002
-KEYEVENTF_SCANCODE = 0x0008
-KEYEVENTF_UNICODE = 0x0004
+def send_input(*inputs):
+    n_inputs = len(inputs)
+    lp_input = Input * n_inputs
+    p_inputs = lp_input(*inputs)
+    cb_size = ctypes.c_int(ctypes.sizeof(Input))
+    return ctypes.windll.user32.SendInput(n_inputs, p_inputs, cb_size)
 
 
 def Mouse(flags, x=0, y=0, data=0):
