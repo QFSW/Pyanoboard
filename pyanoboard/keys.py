@@ -45,6 +45,7 @@ VK_BACK = 0x08                  # BACKSPACE key
 VK_TAB = 0x09                   # TAB key
 VK_CLEAR = 0x0C                 # CLEAR key
 VK_RETURN = 0x0D                # ENTER key
+VK_ENTER = VK_RETURN
 VK_SHIFT = 0x10                 # SHIFT key
 VK_CONTROL = 0x11               # CTRL key
 VK_MENU = 0x12                  # ALT key
