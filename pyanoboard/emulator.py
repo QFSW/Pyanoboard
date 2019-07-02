@@ -1,7 +1,7 @@
 import pygame
 import midi
 import key_handling
-import keys
+import key_events
 from pygame import midi as pygame_midi
 
 class Binding:
@@ -17,7 +17,7 @@ class Binding:
 
     def release(self):
         self.is_pressed = False
-        key_input = key_handling.new_key_input(self.key, keys.KEYEVENTF_KEYUP)
+        key_input = key_handling.new_key_input(self.key, key_events.KEYEVENTF_KEYUP)
         key_handling.send_input(key_input)
 
 
