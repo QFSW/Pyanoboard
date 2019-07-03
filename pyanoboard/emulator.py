@@ -32,7 +32,7 @@ class Emulator:
 
     def release_all(self):
         for binding in self.bindings:
-            binding.un_press()
+            binding.release()
 
     def run(self):
         running = True
@@ -52,11 +52,15 @@ class Emulator:
 
     def handle_pedal(self, midi_event):
         (pedal, is_pressed) = midi.get_pedal(midi_event)
+        if self.verbose:
+            print("Pedal %s %s" % (pedal, is_pressed))
         if is_pressed:
             self.release_all()
 
     def handle_note(self, midi_event):
         (note, dynamic) = midi.get_note(midi_event)
+        if self.verbose:
+            print("Note %s %s" % (note, dynamic))
         for binding in self.bindings:
             if binding.note == note:
                 if dynamic == "OFF":
