@@ -19,6 +19,9 @@ def main():
         sys.exit(-1)
     config_path = args[-1]
 
+    if verbose:
+        print("Loading config file %s..." % config_path)
+
     (device_id, mappings) = config.load(config_path)
 
     if verbose:
@@ -27,6 +30,9 @@ def main():
 
     em = emulator.Emulator(device_id, mappings)
     em.verbose = verbose
+
+    if verbose:
+        print("Running emulator\n")
 
     em.run()
 
