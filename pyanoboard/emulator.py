@@ -32,7 +32,7 @@ class Emulator:
 
     def release_all(self):
         for binding in self.bindings:
-            binding.un_press()
+            binding.release()
 
     def run(self):
         running = True
