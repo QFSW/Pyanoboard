@@ -14,10 +14,15 @@ def main():
 
     verbose = "-verbose" in args
 
-    if len(args) < 1:
+    config_path = None
+    for i in range(len(args)):
+        if not args[i][0] == '-':
+            config_path = args[i]
+            break
+
+    if config_path is None:
         print("A config file must be supplied")
         sys.exit(-1)
-    config_path = args[-1]
 
     if verbose:
         print("Loading config file %s..." % config_path)
