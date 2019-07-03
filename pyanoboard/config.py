@@ -1,6 +1,6 @@
 import json
-import emulator
-import keys
+import pyanoboard.emulator as emulator
+import pyanoboard.keys as keys
 
 
 def parse_key(key_str):

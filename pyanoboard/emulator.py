@@ -1,9 +1,8 @@
 import pygame
 import os
-import midi
-import key_handling
-import key_events
-from pygame import midi as pygame_midi
+import pyanoboard.midi as midi
+import pyanoboard.key_handling as key_handling
+import pyanoboard.key_events as key_events
 
 
 class Binding:

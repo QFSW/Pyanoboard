@@ -1,7 +1,7 @@
 import sys
-import emulator
-import debug
-import config
+import pyanoboard.emulator as emulator
+import pyanoboard.debug as debug
+import pyanoboard.config as config
 
 
 def main():
