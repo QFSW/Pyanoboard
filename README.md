@@ -44,10 +44,10 @@ _example config_
 
 _pyanoboard_ can also take the following arguments
 
-| Argument | Meaning                                                      |
-| -------- | ------------------------------------------------------------ |
-| -verbose | Enables verbose logging                                      |
-| -devices | Shows a list of the connected MIDI devices instead of starting pyanoboard |
+| Argument   | Meaning                                                      |
+| ---------- | ------------------------------------------------------------ |
+| `-verbose` | Enables verbose logging                                      |
+| `-devices` | Shows a list of the connected MIDI devices instead of starting pyanoboard |
 
 In order to find the `device_id` of your device, use the `-devices` argument
 
