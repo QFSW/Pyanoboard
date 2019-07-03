@@ -20,6 +20,11 @@ def main():
     config_path = args[-1]
 
     (device_id, mappings) = config.load(config_path)
+
+    if verbose:
+        for binding in mappings:
+            print("Loaded binding %s to %s" % (binding.note, binding.key))
+
     em = emulator.Emulator(device_id, mappings)
     em.verbose = verbose
 
