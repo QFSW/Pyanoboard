@@ -1,4 +1,4 @@
-# Pyanoboard
+# Pyanoboard ![pip-downloads](https://img.shields.io/pypi/dm/pyanoboard.svg?color=%23fc9a95&style=popout) ![closed-issues](https://img.shields.io/github/issues-closed-raw/QFSW/Pyanoboard.svg?color=51c414) ![open-issues](https://img.shields.io/github/issues-raw/QFSW/Pyanoboard.svg?color=c41414&style=popout)
 _Pyanoboard_ is a simple piano to keyboard emulator, allowing you to use any MIDI enabled device as a virtual keyboard.
 
 _Pyanoboard_ actually simulates key events rather than sending characters to be typed, which means you can use it for anything such as gaming and not just typing.
@@ -7,7 +7,7 @@ _Pyanoboard_ actually simulates key events rather than sending characters to be 
 
 Either
 
-1. Clone this repository, and use `pyanoboard.py` from the `pyanoboard` directory
+1. Clone this repository and use the `pyanoboard` directory
    - You must have `pygame` installed
 2. Install the package via pip `pip install pyanoboard`
 
