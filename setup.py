@@ -8,8 +8,8 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 
 setup(name='pyanoboard',
-      version='1.0.1',
-      description='Simple piano to keyboard adaptor. Works with any MIDI enabled device.',
+      version='1.1.0',
+      description='Pyanoboard is a simple piano to keyboard emulator, allowing you to use any MIDI enabled device as a virtual keyboard.',
       long_description=long_description,
       long_description_content_type='text/markdown',
       url='https://github.com/QFSW/Pyanoboard',
@@ -19,9 +19,4 @@ setup(name='pyanoboard',
       packages=['pyanoboard'],
       install_requires=[
             'pygame',
-      ],
-      entry_points={
-            "console_scripts": [
-                  "pyanoboard=pyanoboard.__main__:main",
-            ]
-      })
+      ])

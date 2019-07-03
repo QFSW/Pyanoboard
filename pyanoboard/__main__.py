@@ -1,4 +1,4 @@
-import pyanoboard
+from .pyanoboard import *
 
 if __name__ == "__main__":
-    pyanoboard.main()
+    main()
