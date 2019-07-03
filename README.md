@@ -7,9 +7,9 @@ _Pyanoboard_ actually simulates key events rather than sending characters to be 
 
 Either
 
-1. Clone this repository and use the `pyanoboard` directory
+ - Clone this repository and use the `pyanoboard` directory
    - You must have `pygame` installed
-2. Install the package via pip `pip install pyanoboard`
+ - Install the package via pip `pip install pyanoboard`
 
 ###  Prerequisites
 
